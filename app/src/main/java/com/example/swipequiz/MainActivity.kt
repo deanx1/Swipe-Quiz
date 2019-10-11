@@ -43,10 +43,10 @@ class MainActivity : AppCompatActivity() {
     private fun initViews() {
 
         // Initialize the recycler view with a linear layout manager, adapter
-        rvReminders.layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
-        rvReminders.adapter = questionAdapter
-        rvReminders.addItemDecoration(DividerItemDecoration(this@MainActivity, DividerItemDecoration.VERTICAL))
-        createItemTouchHelper().attachToRecyclerView(rvReminders)
+        rvQuestions.layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
+        rvQuestions.adapter = questionAdapter
+        rvQuestions.addItemDecoration(DividerItemDecoration(this@MainActivity, DividerItemDecoration.VERTICAL))
+        createItemTouchHelper().attachToRecyclerView(rvQuestions)
 
         // Populate the questions list and notify the data set has changed.
         for (i in Question.QUESTION_QUESTIONS.indices) {
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         // Use ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) to also enable right swipe.
         val callback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
-            // Enables or Disables the ability to move items up and down.
+            // Enables or Disables the ability to move items up and down. Return false because it's not in use
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -81,9 +81,36 @@ class MainActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
 //                questions.removeAt(position)
+                checkAnswer(questions.get(position) ,direction)
+                questionAdapter.notifyItemChanged(viewHolder.adapterPosition)
 
-                Snackbar.make(findViewById(android.R.id.content), "Welcome to Android Teachers..!!", Snackbar.LENGTH_LONG).show();
-                questionAdapter.notifyDataSetChanged()
+            }
+
+            private fun checkAnswer(question: Question, direction: Int) {
+                // If user swipes to the right
+                if (direction == ItemTouchHelper.RIGHT) {
+                    if (question.isTrue) {
+                        snackbarCorrect(question.isTrue)
+                    } else {
+                        snackbarIncorrect(question.isTrue)
+                    }
+                    // Else if the user has swiped to the left
+                } else {
+                    if (!question.isTrue) {
+                        snackbarCorrect(question.isTrue)
+                    } else {
+                        snackbarIncorrect(question.isTrue)
+                    }
+                }
+
+            }
+
+            private fun snackbarCorrect(isTrue: Boolean) {
+                Snackbar.make(findViewById(android.R.id.content), getString(R.string.correct_answer_text) + " " + isTrue, Snackbar.LENGTH_LONG).show();
+            }
+
+            private fun snackbarIncorrect(isTrue: Boolean) {
+                Snackbar.make(findViewById(android.R.id.content), getString(R.string.incorrect_answer_text) + " " + isTrue, Snackbar.LENGTH_LONG).show();
             }
         }
         return ItemTouchHelper(callback)
