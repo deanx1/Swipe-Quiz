@@ -7,7 +7,7 @@ data class Question(
     companion object {
         val QUESTION_QUESTIONS = arrayOf(
             "1 + 1 = 2",
-            "Java > Kotlin",
+            "5 > 3",
             "T && F = T",
             " F || F = T",
             "Pineapple is acceptable on pizza",

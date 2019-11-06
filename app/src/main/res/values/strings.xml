@@ -2,6 +2,6 @@
     <string name="app_name">Swipe Quiz</string>
     <string name="quiz_instructions_text">Quiz Instructions</string>
     <string name="quiz_instructions_text_2">Swipe left for true, swipe right for false. Click on the question for the answer</string>
-    <string name="correct_answer_text">Correct! The answer was</string>
-    <string name="incorrect_answer_text">Incorrect! The answer was</string>
+    <string name="correct_answer_text">Correct! The statement was</string>
+    <string name="incorrect_answer_text">Incorrect! The statement was</string>
 </resources>
